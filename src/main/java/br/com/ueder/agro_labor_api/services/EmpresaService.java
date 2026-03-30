@@ -4,10 +4,11 @@ import br.com.ueder.agro_labor_api.dtos.empresa.DadosEmpresa;
 import br.com.ueder.agro_labor_api.dtos.empresa.DadosEmpresaCreate;
 import br.com.ueder.agro_labor_api.dtos.empresa.DadosEmpresaUpdate;
 import br.com.ueder.agro_labor_api.entities.empresa.Empresa;
-import br.com.ueder.agro_labor_api.entities.mappers.EmpresaMapper;
+import br.com.ueder.agro_labor_api.mappers.EmpresaMapper;
 import br.com.ueder.agro_labor_api.repositories.EmpresaRepository;
 import br.com.ueder.agro_labor_api.utils.Util;
 import br.com.ueder.agro_labor_api.utils.exceptions.RNException;
+import br.com.ueder.agro_labor_api.utils.exceptions.RegistroDuplicadoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class EmpresaService {
     public DadosEmpresa create(DadosEmpresaCreate dados) {
         Empresa model = mapper.toModel(dados);
         if (repository.findByCnpj(model.getCnpj()).isPresent()) {
-            throw new RNException("CNPJ já existe na base de dados: " + Util.formatarCnpj(model.getCnpj()));
+            throw new RegistroDuplicadoException("CNPJ já existe na base de dados: " + Util.formatarCnpj(model.getCnpj()));
         }
         Empresa empresa = repository.save(model);
         return mapper.toDTO(empresa);

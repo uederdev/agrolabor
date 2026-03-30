@@ -3,12 +3,11 @@ package br.com.ueder.agro_labor_api.services;
 import br.com.ueder.agro_labor_api.dtos.turma.DadosTurma;
 import br.com.ueder.agro_labor_api.dtos.turma.DadosTurmaCreate;
 import br.com.ueder.agro_labor_api.dtos.turma.DadosTurmaUpdate;
-import br.com.ueder.agro_labor_api.entities.mappers.TurmaMapper;
 import br.com.ueder.agro_labor_api.entities.turma.Turma;
+import br.com.ueder.agro_labor_api.mappers.TurmaMapper;
 import br.com.ueder.agro_labor_api.repositories.TurmaRepository;
-import br.com.ueder.agro_labor_api.utils.exceptions.RNException;
+import br.com.ueder.agro_labor_api.utils.exceptions.RegistroDuplicadoException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +37,7 @@ public class TurmaService {
     public DadosTurma create(DadosTurmaCreate dados, Long tenantId) {
         Turma model = mapper.toModel(dados, tenantId);
         if (repository.findByControle(tenantId, dados.controle()).isPresent()){
-            throw new RNException("Turma já existente. Controle: " + dados.controle());
+            throw new RegistroDuplicadoException("Turma já existente. Controle: " + dados.controle());
         }
         Turma turmaNew = repository.save(model);
         return mapper.toDTO(turmaNew);

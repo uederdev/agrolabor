@@ -15,14 +15,19 @@ public class Util {
                     .toUri();
     }
 
+//    public static String formatarCnpj(String cnpj) {
+//        try {
+//            MaskFormatter mf = new MaskFormatter("##.###.###/####-##");
+//            mf.setValueContainsLiteralCharacters(false);
+//            return mf.valueToString(cnpj);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Erro ao formatar CNPJ", e);
+//        }
+//    }
+
     public static String formatarCnpj(String cnpj) {
-        try {
-            MaskFormatter mf = new MaskFormatter("##.###.###/####-##");
-            mf.setValueContainsLiteralCharacters(false);
-            return mf.valueToString(cnpj);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao formatar CNPJ", e);
-        }
+        return cnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})",
+                "$1.$2.$3/$4-$5");
     }
 
     public static Long getTenantId(HttpServletRequest request) {
@@ -30,4 +35,7 @@ public class Util {
         return  Long.valueOf(attribute.toString());
     }
 
+    public static String formatarCpf(String cpf) {
+        return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    }
 }
